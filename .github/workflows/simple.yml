@@ -18,7 +18,7 @@ name: Ejecutando Comandos Shell
 on: [push]
 
 jobs:
-  #Nombre del Job
+  #Nombre del primer Job
   ejecuta-shell-command:
     #En que runner va a correr?
     runs-on: ubuntu-latest
@@ -37,6 +37,7 @@ jobs:
           print
           (platform.processor())
         shell: python
+  #Nombre del segundo Job (recuerda, se ejecuta en paralelo a menos que especifiques "needs: [job1, job2, jobn]") como es el caso        
   ejecuta-windwos-commands:
     runs-on: windows-latest
     #Requiere del job anterior para poder ejecutarse, es como hacerlo en lineal y asi se evita que se ejecuten en paralelo
