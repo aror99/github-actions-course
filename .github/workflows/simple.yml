@@ -1,29 +1,50 @@
-name: Shell Commands 
+name: Ejecutando Comandos Shell 
 
+#Se disparará cuando haya un push en el repositorio, sin importar la rama
+# Para especificar la rama:
+# on: 
+#    push: 
+#        branches:
+#            mi-branch
+# 
+# O tambien para especificar todas menos master:
+# on:
+#   push:
+#     branches:
+#       - '*'
+#       - '!master'
+#
+# Para mas info ve: https://stackoverflow.com/questions/58139406/only-run-job-on-specific-branch-with-github-actions
 on: [push]
 
 jobs:
-  run-shell-command:
+  #Nombre del Job
+  ejecuta-shell-command:
+    #En que runner va a correr?
     runs-on: ubuntu-latest
     steps: 
-      - name: echo a string
+      #Los pasos a ejecutar
+      - name: Imprimiendo un string
         run: echo "Hello World"
-      - name: multiline script 
+      - name: Script multi linea 
         run: |
            node -v 
            npm -v
-      - name: python Command 
+      #Este paso indica que interprete se usará, en este caso python, por default es bash
+      - name: Comando en Python 
         run: |
           import platform 
           print
           (platform.processor())
         shell: python
-  run-windwos-commands:
+  ejecuta-windwos-commands:
     runs-on: windows-latest
-    needs: ["run-shell-command"]
+    #Requiere del job anterior para poder ejecutarse, es como hacerlo en lineal y asi se evita que se ejecuten en paralelo
+    needs: ["ejecuta-shell-command"]
     steps:
-      - name: Directory PowerShell
+      - name: Directorio en PowerShell
         run: Get-Location 
-      - name: Directory Bash 
+      #Similar al ejemplo de python, esto provoca que se use el shell "bash"
+      - name: Directorio en Bash 
         run: pwd 
         shell: bash 

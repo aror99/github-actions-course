@@ -1,16 +1,37 @@
-name: Actions Workflow 
+name: Actions en un Workflow 
 
 on: [push]
 
 jobs: 
-  run-github-actions: 
+  ejecuta-github-action: 
     runs-on: ubuntu-latest
     steps: 
       - name: Simple JS Action
-        id: greet 
+        #El id lo agregamos para poder referirnos a este step en "Log Greeting Time", en la parte de ${{ steps.saludeishon.outputs.time }}
+        id: saludeishon 
+        #Este es un ejemplo de uso de una Github Action ya creada previamente.
+        # Nosotros tambien podemos hacer nuestras Actions y usarlas de este modo o usar las que andan por todo internet.
+        # En este caso, esta action solo te imprime lo que le configures en "who-to-greet"
+        # Para seguir viendo mas, ve a NOTA_1...
         uses: actions/hello-world-javascript-action@v1
+        # Asi es una de las formas en que se le pasan valores a un Action. Mas formas en tutoriales mas adelante
         with: 
           who-to-greet: John
       - name: Log Greeting Time
-        run: echo "${{ steps.greet.outputs.time }}"
+        # Las Actions pueden tener input y outputs, para que un step mas adelante podamos leer los outputs, se usa esta sintaxis ${{steps.<id>.outputs.<valor>}}
+        run: echo "${{ steps.saludeishon.outputs.time }}"
 
+
+# NOTA_1:
+# en "uses: actions/hello-world-javascript-action@v1"
+# podemos identificar lo siguiente:
+#    - "actions" : Indica que vamos a usar una action.
+#    - "hello-world-javascript-action" : Es el nombre del repositorio.
+#                                        https://github.com/actions/hello-world-javascript-action
+#    - @v1 : Indica el nombre del tag, aunque esto puede variar:
+#             - @v1.1.2 = tag. Es la forma mas usada, y asi aseguramos no tomar la ultima versión que
+#                          ,con el tiempo, pudiera romper o cambiar el comportamiento que esperamos.
+#             - @ad41a6c27317e688719c813b0d6a25685a9bce54 = commit. Es la forma mas segura
+#                                                            , combina los beneficios de usar el tag
+#                                                            , pero un sha de commit nunca va a cambiar.
+#              - @master = similar a un tag, pero aqui apuntamos a branch master. Es mejor NO hacer esto.
